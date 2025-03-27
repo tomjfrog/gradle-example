@@ -3,7 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.4.4'
     id 'io.spring.dependency-management' version '1.1.7'
     id "com.jfrog.artifactory" version "5.+"
-    id 'maven-publish' // needed to add this
+    id 'maven-publish' // ***** This is needed
 }
 
 
@@ -64,9 +64,9 @@ artifactory {
         repository {
             // Set the Artifactory repository key
             // Specify the publisher username
-//            username = findProperty("artifactory_user")
-//            password = findProperty("artifactory_password")
-            // Option 2 - Specify release and snapshot repositories; let the plugin decide to which one to publish
+            //  username = findProperty("artifactory_user") <--------- Not needed since using JF CLI
+            //  password = findProperty("artifactory_password") <---------- Not needed since using JF CLI
+            //  Specify release and snapshot repositories; let the plugin decide to which one to publish
             releaseRepoKey = "gradleexample-libs-release-local"
             snapshotRepoKey = "gradleexample-libs-snapshot-local"
         }

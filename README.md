@@ -3,7 +3,7 @@
 In order to be able to publish to Snapshot and Release repositories individually, it appears to be necessary to use the Artifactory Gradle Plugin.  
 
 The key parts to the config include:
-* run `jf gradlec`, specifying dependency resolution repository and any publishing re
+* run `jf gradlec`, specifying dependency resolution repository and any publishing repositories (although these will be overridden in the Artifactory Gradle Plugin's `artifactory` block.)
 * Using the `maven-publish` plugin
 * Configuring the `artifactory` block in the `build.gradle` spec
 * Executing the Gradle task `artifactoryPublish`
