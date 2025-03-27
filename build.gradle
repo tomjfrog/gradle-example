@@ -1,0 +1,82 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id "com.jfrog.artifactory" version "5.+"
+    id 'maven-publish' // needed to add this
+}
+
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+// *** This block is not necessary due to the config in the `.jfrog/gradle.yml` file
+//repositories {
+//    maven {
+//        url = "https://tomjfrog.jfrog.io/artifactory/gradleexample-maven-remote"
+//        credentials {
+//                username = findProperty("artifactory_user")
+//                password = findProperty("artifactory_password")
+//        }
+//    }
+//}
+
+// *** This block is necessary due to the Artifactory Gradle Plugin's extension of the `maven-publish` plugin
+publishing {
+    publications {
+        myPublication(MavenPublication) {
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionResult()
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+
+            groupId = 'com.tomjfrog'
+            artifactId = 'gradle-example'
+            version = '1.0.3-SNAPSHOT'
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// This block comes from https://github.com/jfrog/artifactory-gradle-plugin and is the only means to
+// set both 'release` and `snapshot` repos.
+artifactory {
+    publish {
+        // Define the Artifactory URL for publishing artifacts
+        contextUrl = 'https://tomjfrog.jfrog.io/artifactory'
+        // Define the project repository to which the artifacts will be published
+        repository {
+            // Set the Artifactory repository key
+            // Specify the publisher username
+//            username = findProperty("artifactory_user")
+//            password = findProperty("artifactory_password")
+            // Option 2 - Specify release and snapshot repositories; let the plugin decide to which one to publish
+            releaseRepoKey = "gradleexample-libs-release-local"
+            snapshotRepoKey = "gradleexample-libs-snapshot-local"
+        }
+        // Include all configured publications for all the modules
+        defaults {
+            publications('ALL_PUBLICATIONS')
+        }
+        publishBuildInfo = true
+
+    }
+    // Optionally, configure and control the information and attributes of the generated build-info file.
+    // Alternatively, you can configure the attributes by using the `clientConfig.info` object.
+}

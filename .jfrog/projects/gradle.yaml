@@ -1,0 +1,12 @@
+version: 1
+type: gradle
+resolver:
+    repo: gradleexample-maven-remote
+    serverId: tomjfrog
+deployer:
+    repo: gradleexample-libs-snapshot
+    serverId: tomjfrog
+    ivyPattern: '[organization]/[module]/ivy-[revision].xml'
+    artifactPattern: '[organization]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+usePlugin: true
+useWrapper: true
