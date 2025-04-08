@@ -6,7 +6,8 @@ This is a basic working example that requires:
 ## Environment Variables for:
 1. Username
 1. Password
-1. Build Number.  Since this likely will be run in Github Actions, set the Env Var for the run step to `${{ github.run_number }}`
+1. Build Number.  Since this likely will be run in Github Actions, set the Env Var for the run step to
+`${{ github.run_number }}`
 
 Execute:
 ```bash
