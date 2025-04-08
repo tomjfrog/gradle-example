@@ -12,16 +12,16 @@ java {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
-// *** This block is not necessary due to the config in the `.jfrog/gradle.yml` file
-//repositories {
-//    maven {
-//        url = "https://tomjfrog.jfrog.io/artifactory/gradleexample-maven-remote"
-//        credentials {
-//                username = findProperty("artifactory_user")
-//                password = findProperty("artifactory_password")
-//        }
-//    }
-//}
+
+repositories {
+    maven {
+        url = "https://tomjfrog.jfrog.io/artifactory/gradleexample-maven-remote"
+        credentials {
+            username = System.getenv("ARTIFACTORY_USER")
+            password = System.getenv("ARTIFACTORY_PASSWORD")
+        }
+    }
+}
 
 // *** This block is necessary due to the Artifactory Gradle Plugin's extension of the `maven-publish` plugin
 publishing {
@@ -39,7 +39,7 @@ publishing {
 
             groupId = 'com.tomjfrog'
             artifactId = 'gradle-example'
-            version = '1.0.3-SNAPSHOT'
+            version = '1.0.4.3-SNAPSHOT'
         }
     }
 }
@@ -69,14 +69,28 @@ artifactory {
             //  Specify release and snapshot repositories; let the plugin decide to which one to publish
             releaseRepoKey = "gradleexample-libs-release-local"
             snapshotRepoKey = "gradleexample-libs-snapshot-local"
+            username = System.getenv("ARTIFACTORY_USER")
+            password = System.getenv("ARTIFACTORY_PASSWORD")
         }
         // Include all configured publications for all the modules
         defaults {
             publications('ALL_PUBLICATIONS')
         }
         publishBuildInfo = true
+        buildInfo {
+            // Set specific build and project information for the build-info
+            buildName = "gradle-example"
+            buildNumber = System.getenv("BUILD_NUMBER")
+
+            // If Project Support is needed, please add the Project Prefix or Project ID here
+
+            // project = "project-key" <---------
+            // Add a dynamic property to the build-info
+            // Generate a copy of the build-info.json file in the following path
+            // generatedBuildInfoFilePath = "/Users/gradle-example-publish/myBuildInfoCopy.json"
+            // Generate a file with all the deployed artifacts' information in the following path
+            // deployableArtifactsFilePath = "/Users/gradle-example-publish/myArtifactsInBuild.json"
+        }
 
     }
-    // Optionally, configure and control the information and attributes of the generated build-info file.
-    // Alternatively, you can configure the attributes by using the `clientConfig.info` object.
 }

@@ -4,7 +4,7 @@ resolver:
     repo: gradleexample-maven-remote
     serverId: tomjfrog
 deployer:
-    repo: gradleexample-libs-snapshot
+    repo: gradleexample-libs-release
     serverId: tomjfrog
     ivyPattern: '[organization]/[module]/ivy-[revision].xml'
     artifactPattern: '[organization]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'

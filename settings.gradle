@@ -1,1 +1,14 @@
-rootProject.name = 'gradle-example'
+pluginManagement {
+    repositories {
+        maven {
+            url = uri("https://tomjfrog.jfrog.io/gradle-plugins-remote")
+            credentials {
+                username = System.getenv("ARTIFACTORY_USER")
+                password = System.getenv("ARTIFACTORY_PASSWORD")
+            }
+        }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = "gradle-example"
