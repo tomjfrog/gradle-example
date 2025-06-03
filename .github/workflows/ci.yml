@@ -1,0 +1,22 @@
+on:
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Setup JFrog CLI
+          uses: jfrog/setup-jfrog-cli@v4.5.11
+          with:
+              JF_URL: ${{ vars.JFROG_URL }}
+
+
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: Run tests
+          run: |
+            pytest tests/
