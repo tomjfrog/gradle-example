@@ -79,7 +79,7 @@ artifactory {
         publishBuildInfo = true
         buildInfo {
             // Set specific build and project information for the build-info
-            buildName = "legacy-gradle-plugin-build"
+            buildName = System.getenv("GRADLE_BUILD_NAME")
             buildNumber = System.getenv("BUILD_NUMBER") ?: '999'
 
             // If Project Support is needed, please add the Project Prefix or Project ID here
