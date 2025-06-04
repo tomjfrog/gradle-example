@@ -5,8 +5,9 @@ permissions:
   id-token: write
 
 env:
-  JFROG_CLI_BUILD_NAME: "legacy-gradle-plugin-build"
+  BASE_BUILD_NAME: "legacy-gradle-plugin-build"
   JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
+  JFROG_CLI_AGGREGATED_BUILD_NAME: "legacy-gradle-plugin-build-aggregated"
 
 jobs:
     build:
@@ -20,6 +21,7 @@ jobs:
           id: cli
           env:
             JF_URL: ${{ vars.JF_URL }}
+            JFROG_CLI_BUILD_NAME: ${{ env.BASE_BUILD_NAME }}-cli
           with:
             oidc-provider-name: github-oidc-integration
             oidc-audience: jfrog-github
@@ -29,6 +31,7 @@ jobs:
           env:
             ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
             ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+            BUILD_NAME: ${{ env.BASE_BUILD_NAME }}-gradle
             BUILD_NUMBER: ${{ github.run_number }}
           run: |
             ./gradlew \
@@ -37,9 +40,14 @@ jobs:
             --info \
             --stacktrace
             
-        - name: Decorate Build Info
+        - name: Decorate And Publish Second Build Info
           id: decorate-build-info
           run: |
             jfrog rt build-collect-env ${{ env.JFROG_CLI_BUILD_NAME }} ${{ github.run_number }} 
             jfrog rt build-add-git ${{ env.JFROG_CLI_BUILD_NAME }} ${{ github.run_number }}
             jfrog rt build-publish ${{ env.JFROG_CLI_BUILD_NAME }} ${{ github.run_number }}
+
+        - name: Aggregate Build Infos With Same Name For Children
+          run: |
+            jf rt build-append ${{ env.BASE_BUILD_NAME }}-aggregated ${{ github.run_number }} ${{ env.BASE_BUILD_NAME }}-gradle ${{ github.run_number }}
+            jf rt build-append ${{ env.BASE_BUILD_NAME }}-aggregated ${{ github.run_number }} ${{ env.BASE_BUILD_NAME }}-cli ${{ github.run_number }}
