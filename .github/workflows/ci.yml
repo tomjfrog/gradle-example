@@ -31,8 +31,8 @@ jobs:
           env:
             ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
             ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-            BUILD_NAME: ${{ env.BASE_BUILD_NAME }}-gradle
-            BUILD_NUMBER: ${{ github.run_number }}
+            JFROG_CLI_BUILD_NAME: ${{ env.BASE_BUILD_NAME }}-gradle
+            JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
           run: |
             ./gradlew \
             build \
