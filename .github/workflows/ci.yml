@@ -1,6 +1,9 @@
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -12,7 +15,7 @@ jobs:
           uses: jfrog/setup-jfrog-cli@v4
           id: cli
           env:
-            JF_URL: https://tomjfrog.jfrog.io
+            JF_URL: ${{ vars.JF_URL }}
           with:
             oidc-provider-name: github-oidc-integration
             oidc-audience: jfrog-github
