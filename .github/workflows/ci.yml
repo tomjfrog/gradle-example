@@ -10,6 +10,7 @@ env:
   GRADLE_BUILD_NAME: "legacy-gradle-plugin-build-gradle"
   JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
   AGGREGATED_BUILD_NAME: "legacy-gradle-plugin-build-aggregated"
+  BUILD_NUMBER: ${{ github.run_number }}
 
 jobs:
     build:
@@ -32,8 +33,6 @@ jobs:
           env:
             ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
             ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-            JFROG_CLI_BUILD_NAME: ${{ env.GRADLE_BUILD_NAME }}
-            BUILD_NUMBER: ${{ github.run_number }}
           run: |
             ./gradlew \
             build \
