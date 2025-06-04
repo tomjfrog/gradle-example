@@ -38,6 +38,6 @@ jobs:
         - name: Decorate Build Info
           id: decorate-build-info
           run: |
-            jfrog rt bce example-project ${{ github.run_number }} --build-url ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            jfrog rt bag example-project ${{ github.run_number }} --status SUCCESS --build-url ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            jfrog rt bp example-project ${{ github.run_number }}
+            jfrog rt build-collect-env ${{ env.JFROG_CLI_BUILD_NAME }} ${{ github.run_number }} 
+            jfrog rt build-add-git ${{ env.JFROG_CLI_BUILD_NAME }} ${{ github.run_number }}
+            jfrog rt build-publish ${{ env.JFROG_CLI_BUILD_NAME }} ${{ github.run_number }}
