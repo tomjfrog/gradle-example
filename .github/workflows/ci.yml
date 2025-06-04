@@ -27,5 +27,9 @@ jobs:
             ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
             BUILD_NUMBER: ${{ github.run_number }}
           run: |
-            ./gradlew build artifactoryPublish--info --stacktrace
+            ./gradlew \
+            build \
+            artifactoryPublish \
+            --info \
+            --stacktrace
             
