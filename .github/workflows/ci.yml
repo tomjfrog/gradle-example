@@ -6,17 +6,21 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v2
 
-        - name: Setup JFrog CLI
-          uses: jfrog/setup-jfrog-cli@v4.5.11
+        - name: Install jfrog cli
+          uses: jfrog/setup-jfrog-cli@v4
+          id: cli
+          env:
+            JF_URL: https://tomjfrog.jfrog.io
           with:
-              JF_URL: ${{ vars.JFROG_URL }}
+            oidc-provider-name: github-oidc-integration
+            oidc-audience: jfrog-github
+            disable-auto-build-publish: true
 
-
-        - name: Install dependencies
+        - name: Build and Publish with Gradle
+          env:
+            ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+            ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+            BUILD_NUMBER: ${{ github.run_number }}
           run: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-
-        - name: Run tests
-          run: |
-            pytest tests/
+            ./gradlew build artifactoryPublish--info --stacktrace
+            
