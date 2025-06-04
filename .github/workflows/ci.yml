@@ -6,10 +6,10 @@ permissions:
 
 env:
   BASE_BUILD_NAME: "legacy-gradle-plugin-build"
-  JFROG_CLI_BUILD_NAME: ${{ env.BASE_BUILD_NAME }}-cli
-  GRADLE_BUILD_NAME: ${{ env.BASE_BUILD_NAME }}-gradle
+  JFROG_CLI_BUILD_NAME: "legacy-gradle-plugin-build-cli"
+  GRADLE_BUILD_NAME: "legacy-gradle-plugin-build-gradle"
   JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
-  AGGREGRATED_BUILD_NAME: "legacy-gradle-plugin-build-aggregated"
+  AGGREGATED_BUILD_NAME: "legacy-gradle-plugin-build-aggregated"
 
 jobs:
     build:
@@ -23,7 +23,6 @@ jobs:
           id: cli
           env:
             JF_URL: ${{ vars.JF_URL }}
-            JFROG_CLI_BUILD_NAME: ${{ env.BASE_BUILD_NAME }}-cli
           with:
             oidc-provider-name: github-oidc-integration
             oidc-audience: jfrog-github
@@ -51,6 +50,6 @@ jobs:
 
         - name: Aggregate Build Infos With Same Name For Children
           run: |
-            jf rt build-append ${{ env.AGGREGRATED_BUILD_NAME }} ${{ github.run_number }} ${{ env.GRADLE_BUILD_NAME }} ${{ github.run_number }}
-            jf rt build-append ${{ env.AGGREGRATED_BUILD_NAME }} ${{ github.run_number }} ${{ env.JFROG_CLI_BUILD_NAME }}-cli ${{ github.run_number }}
-            jf rt build-publish ${{ env.AGGREGRATED_BUILD_NAME }} ${{ github.run_number }}
+            jf rt build-append ${{ env.AGGREGATED_BUILD_NAME }} ${{ github.run_number }} ${{ env.GRADLE_BUILD_NAME }} ${{ github.run_number }}
+            jf rt build-append ${{ env.AGGREGATED_BUILD_NAME }} ${{ github.run_number }} ${{ env.JFROG_CLI_BUILD_NAME }}-cli ${{ github.run_number }}
+            jf rt build-publish ${{ env.AGGREGATED_BUILD_NAME }} ${{ github.run_number }}
