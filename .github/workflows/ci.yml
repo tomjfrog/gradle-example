@@ -50,5 +50,5 @@ jobs:
         - name: Aggregate Build Infos With Same Name For Children
           run: |
             jf rt build-append ${{ env.AGGREGATED_BUILD_NAME }} ${{ github.run_number }} ${{ env.GRADLE_BUILD_NAME }} ${{ github.run_number }}
-            jf rt build-append ${{ env.AGGREGATED_BUILD_NAME }} ${{ github.run_number }} ${{ env.JFROG_CLI_BUILD_NAME }}-cli ${{ github.run_number }}
+            jf rt build-append ${{ env.AGGREGATED_BUILD_NAME }} ${{ github.run_number }} ${{ env.JFROG_CLI_BUILD_NAME }} ${{ github.run_number }}
             jf rt build-publish ${{ env.AGGREGATED_BUILD_NAME }} ${{ github.run_number }}
